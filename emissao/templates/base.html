@@ -1,0 +1,61 @@
+{% load static %}<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block titulo %}Certificados · Gestão Tech{% endblock %}</title>
+<meta name="description" content="Emita e valide os certificados das oficinas do projeto Gestão Tech — IFBA Campus Vitória da Conquista.">
+<link rel="icon" href="{% static 'img/ifba_preto.png' %}">
+<link rel="stylesheet" href="{% static 'css/telas.css' %}">
+<link rel="stylesheet" href="{% static 'css/componentes.css' %}">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+<svg class="circuito" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+  <g stroke="#CBD5E1" stroke-width="1" fill="none" opacity=".55">
+    <path d="M0 120 H240 L300 180 H520"/><path d="M0 210 H180 L230 160 H430"/>
+    <path d="M1440 760 H1200 L1140 700 H980"/><path d="M1440 690 H1260 L1210 740 H1040"/>
+  </g>
+  <g fill="#CBD5E1" opacity=".7"><circle cx="520" cy="180" r="3"/><circle cx="430" cy="160" r="3"/>
+  <circle cx="980" cy="700" r="3"/><circle cx="1040" cy="740" r="3"/></g>
+  <g stroke="#DBE6F2" stroke-width="1.2" fill="none" opacity=".8">
+    <path d="M-40 470 l60 -60 l60 60 l-60 60 z"/><path d="M60 410 l60 -60 l60 60 l-60 60 z"/>
+    <path d="M1380 300 l55 -55 l55 55 l-55 55z"/>
+  </g>
+</svg>
+
+<div class="site">
+  <header class="topo">
+    <a class="marca" href="{% url 'emitir' %}">
+      <img src="{% static 'img/ifba_preto.png' %}" alt="IFBA">
+      <span class="sep"></span>
+      <span class="txt"><b>GESTÃO TECH</b><span>Certificados das oficinas</span></span>
+    </a>
+    <nav class="nav">
+      <a href="{% url 'emitir' %}" class="{% if nav == 'emitir' %}ativo{% endif %}">
+        <span class="rot-longo">Emitir certificado</span><span class="rot-curto">Emitir</span></a>
+      <a href="{% url 'validar' %}" class="{% if nav == 'validar' %}ativo{% endif %}">
+        <span class="rot-longo">Validar certificado</span><span class="rot-curto">Validar</span></a>
+      <a href="#sobre" class="so-oculta">Sobre o projeto</a>
+    </nav>
+  </header>
+
+  {% block conteudo %}{% endblock %}
+
+  <footer class="rodape" id="sobre">
+    <div class="apoio">
+      <span class="rot">Realização e apoio</span>
+      <img src="{% static 'img/proex_borda.png' %}" alt="PROEX">
+      <img class="uesb" src="{% static 'img/uesb_borda.png' %}" alt="UESB">
+      <img src="{% static 'img/fainor_borda.png' %}" alt="FAINOR">
+    </div>
+    <div class="creditos">
+      Instituto Federal da Bahia · Campus Vitória da Conquista<br>
+      Projeto Gestão Tech · Bacharelado em Sistemas de Informação<br>
+      Dúvidas: certificados@ifba.edu.br · {{ ano }}
+    </div>
+  </footer>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

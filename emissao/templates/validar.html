@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Validar certificado · Gestão Tech{% endblock %}
+
+{% block conteudo %}
+<main class="conteudo">
+  <section class="hero-val">
+    <div class="sobre">Verificação de autenticidade</div>
+    <h1>Validar certificado</h1>
+    <p>Digite o código impresso no rodapé do certificado ou escaneie o QR Code.
+       A validação é pública e não exige login.</p>
+  </section>
+
+  <div class="grid-validar">
+    <div style="display:flex;flex-direction:column;gap:22px">
+      <div class="cartao cartao-form">
+        <form class="form-empilhado" method="get" action="{% url 'validar' %}" novalidate>
+          <div class="campo">
+            <label for="codigo">Código de validação</label>
+            <input class="input mono codigo-grande" id="codigo" name="codigo" maxlength="18"
+                   placeholder="OFC-XXXX-XXXX-XXXX" value="{{ codigo|default:'' }}"
+                   autocomplete="off" spellcheck="false" data-mascara-codigo required>
+            <div class="dica-qr">
+              <svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3M20 20h1M20 14h1M14 20h3"/></svg>
+              Escaneou o QR Code? Você já cai direto em
+              <b>/validar/OFC-7K3M-9QX2-LP4A</b>
+            </div>
+          </div>
+          <button class="btn btn-primario btn-bloco" type="submit">
+            <span class="rotulo">Validar</span>
+          </button>
+        </form>
+      </div>
+
+      {% if estado == 'valido' %}
+      <div class="resultado-valido" role="status" aria-live="polite">
+        <div class="cab">
+          <div class="escudo"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg></div>
+          <div>
+            <h2>Certificado válido</h2>
+            <div class="sub">Autenticidade confirmada</div>
+          </div>
+        </div>
+        <div class="lista-dados">
+          <div><span>Participante</span><b>{{ nome }}</b></div>
+          <div><span>Papel</span><b>{{ papel|capfirst }}</b></div>
+          <div><span>Oficina</span><b>{{ oficina }}</b></div>
+          <div><span>Carga horária</span><b>4 horas</b></div>
+          <div><span>Instituição</span><b>IFBA · Campus Vitória da Conquista</b></div>
+          <div><span>Código</span><b class="mono" style="font-size:13px">{{ codigo }}</b></div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% if estado %}
+      <div class="estados">
+        {% if estado == 'invalido' %}
+        <div class="estado estado-invalido" role="alert">
+          <svg class="i18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+               stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          <div><b>Código não encontrado.</b> <span>Confira os caracteres e tente novamente.</span></div>
+        </div>
+        {% elif estado == 'revogado' %}
+        <div class="estado estado-revogado" role="alert">
+          <svg class="i18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16.5v.01"/></svg>
+          <div><b>Certificado cancelado.</b> <span>Este certificado foi revogado pela organização.</span></div>
+        </div>
+        {% elif estado == 'limite' %}
+        <div class="estado estado-aviso" role="alert">
+          <svg class="i18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
+          <div><b>Aguarde 1 minuto.</b> <span>Muitas consultas seguidas. Tente novamente em instantes.</span></div>
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <aside class="cartao card-val">
+      <h3>O que a validação confirma</h3>
+      <ul>
+        <li><svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+          stroke-linecap="round"><path d="m5 13 4.5 4.5L19 7"/></svg>
+          <span>Que o certificado foi emitido por este projeto.</span></li>
+        <li><svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+          stroke-linecap="round"><path d="m5 13 4.5 4.5L19 7"/></svg>
+          <span>Nome, oficina, papel e carga horária.</span></li>
+        <li><svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+          stroke-linecap="round"><path d="m5 13 4.5 4.5L19 7"/></svg>
+          <span>Se o documento foi cancelado depois da emissão.</span></li>
+      </ul>
+      <div class="aviso" style="margin-top:20px">
+        <svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <span>A consulta é pública, mas <b>não listamos participantes</b> e não mostramos o CPF.
+        Cada código valida um único certificado.</span>
+      </div>
+    </aside>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

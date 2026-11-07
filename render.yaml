@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: gestao-tech
+    runtime: docker
+    plan: starter          # o plano free (512 MB) não segura o LibreOffice
+    healthCheckPath: /
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SITE_URL
+        value: https://gestao-tech.onrender.com   # troque pelo domínio final
+      - key: DATA_LIBERACAO
+        value: "2026-11-06"
+      - key: ALLOWED_HOSTS
+        value: gestao-tech.onrender.com
+      - key: DEBUG
+        value: "0"

@@ -1,0 +1,11 @@
+# Django 5.2 LTS: suporta Python 3.10 até 3.14 (o 3.14 entrou na 5.2.8)
+Django>=5.2.8,<6.0
+python-docx>=1.1
+qrcode[pil]>=7.4
+pypdf>=4.0
+django-ratelimit>=4.1
+gunicorn>=23
+whitenoise>=6.6
+psycopg[binary]>=3.2.10
+python-dotenv>=1.0
+dj-database-url>=2.1

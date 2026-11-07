@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Certificado encontrado · Gestão Tech{% endblock %}
+
+{% block conteudo %}
+<main class="conteudo">
+  <div class="sucesso">
+    <div class="selo"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor"
+      stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg></div>
+    <div>
+      <h1>Certificado{{ participacoes|length|pluralize }} encontrado{{ participacoes|length|pluralize }}</h1>
+      <p>Encontramos {{ participacoes|length }} certificado{{ participacoes|length|pluralize }}
+         para <b>{{ participacoes.0.nome }}</b></p>
+    </div>
+    <div class="resumo">
+      {% for p in participacoes %}
+      <span class="papel papel-{{ p.papel|lower }}">{{ p.papel|capfirst }}</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <section class="cartoes">
+    {% for p in participacoes %}
+    <article class="cartao cartao-resultado borda-papel borda-{{ p.papel|lower }}">
+      <div class="miniatura">
+        <img src="{% static 'img/previa_certificado.png' %}" alt="Prévia do certificado de {{ p.papel|lower }}">
+      </div>
+      <div class="dados">
+        <span class="papel papel-{{ p.papel|lower }}">{{ p.papel|capfirst }}</span>
+        <h3>{{ p.nome }}</h3>
+        <div class="oficina">{{ p.oficina }}</div>
+        <div class="meta">
+          <span><svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+            {% if p.papel %}Certificado digital{% endif %}</span>
+          <span><svg class="i16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/></svg>
+            Carga horária de 4 horas</span>
+        </div>
+        <a class="btn btn-primario" href="{% url 'baixar' p.token %}" data-botao-download>
+          <svg class="i18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
+          <span class="rotulo">Baixar PDF</span>
+        </a>
+      </div>
+    </article>
+    {% endfor %}
+  </section>
+
+  <div class="rodape-resultado">
+    <a class="btn btn-fantasma" style="height:44px;padding:0 18px;font-size:13.5px"
+       href="{% url 'emitir' %}">Emitir outro certificado</a>
+    <span class="sep"></span>
+    <span>Cada PDF traz um código de validação e um QR Code para conferência pública.</span>
+  </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

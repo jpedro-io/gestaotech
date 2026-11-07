@@ -1,0 +1,10 @@
+[
+  {"nome": "Maria da Silva Souza", "cpf": "52998224725", "oficina": "Introdução ao Git e GitHub",
+   "papel": "OUVINTE", "codigo": "OFC-7K3M-9QX2-LP4A", "revogado": false},
+  {"nome": "Maria da Silva Souza", "cpf": "52998224725", "oficina": "Lógica de Programação com Python",
+   "papel": "MINISTRANTE", "codigo": "OFC-4HT8-2WNC-6RDE", "revogado": false},
+  {"nome": "João Pereira Santos", "cpf": "11144477735", "oficina": "Introdução ao Git e GitHub",
+   "papel": "ORGANIZADOR", "codigo": "OFC-9BXK-3MVP-7TQ2", "revogado": false},
+  {"nome": "Ana Costa Lima", "cpf": "12345678909", "oficina": "Introdução ao Git e GitHub",
+   "papel": "OUVINTE", "codigo": "OFC-5ZJD-8GLA-2KEH", "revogado": true}
+]

@@ -11,7 +11,7 @@ from certificados.models import Participacao
 
 from . import dados
 from .certificado import gerar_pdf
-from .cpf import normalizar, valido
+from .cpf import normalizar
 
 ERRO = ("Não encontramos um certificado com esses dados. "
         "Confira se o nome, o CPF e a oficina estão corretos.")
@@ -43,8 +43,10 @@ def buscar(request):
         return _form(request, "Os certificados ainda não foram liberados.", 200, digitado, oficina)
 
     cpf = normalizar(request.POST.get("cpf", ""))
-    if not valido(cpf):
-        return _form(request, "CPF inválido. Confira os números digitados.", 200, digitado, oficina)
+    if len(cpf) != 11:
+        return _form(request, "CPF incompleto. Digite os 11 números.", 200, digitado, oficina)
+    # não checamos o dígito verificador aqui de propósito: há participantes cadastrados
+    # com o CPF que declararam na inscrição, e a busca é por hash exato
 
     # compara o nome de forma tolerante (só como filtro, sem revelar qual campo falhou)
     nome = " ".join(digitado["nome"].split()).lower()

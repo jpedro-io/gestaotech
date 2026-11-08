@@ -169,3 +169,5 @@ Instituto Federal de Educação, Ciência e Tecnologia da Bahia (IFBA) — Campu
 Apoio institucional: PROEX, UESB e FAINOR.
 
 Dúvidas sobre certificados: **jprocha.tech@gmail.com**
+
+**João Pedro Campos Rocha** - Desenvolvedor do site e certificados

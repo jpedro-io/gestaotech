@@ -3,6 +3,16 @@
 .env.*
 !.env.example
 
+# ── DADOS PESSOAIS: nunca versionar ────────────────────────────────────────
+# CSVs de participantes têm nome + CPF completos (LGPD).
+# Guarde-os fora do repositório (ex.: OneDrive/Documentos/gestao-tech-dados).
+importacao/*.csv
+importacao/*.json
+importacao/*.xlsx
+importacao/*.ods
+# exceto o modelo de exemplo, com dados fictícios
+!importacao/exemplo.csv
+
 # ── banco local e arquivos gerados ─────────────────────────────────────────
 db.sqlite3
 *.sqlite3
@@ -27,6 +37,3 @@ Thumbs.db
 
 # ── capturas de teste ──────────────────────────────────────────────────────
 capturas/
-
-# ── Fly ────────────────────────────────────────────────────────────────────
-# o fly.toml VAI para o repositório (é a configuração do app)

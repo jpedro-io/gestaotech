@@ -5,6 +5,14 @@ __pycache__/
 .venv/
 .git/
 capturas
-pessoas_exemplo.csv
 participacoes.csv
 COMO_RODAR.md
+
+# dados pessoais: não entram na imagem que vai para o registro do Fly
+importacao/*.csv
+importacao/*.json
+!importacao/exemplo.csv
+
+# segredos
+.env
+.env.*

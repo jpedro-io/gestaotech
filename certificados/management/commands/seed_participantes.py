@@ -34,10 +34,14 @@ class Command(BaseCommand):
         parser.add_argument("--csv", help="CSV com nome,cpf,oficina,papel")
         parser.add_argument("--atualizar-nomes", action="store_true",
                             help="sobrescreve o nome de um registro já existente")
+        parser.add_argument("--aceitar-cpf-invalido", action="store_true",
+                            help="cadastra mesmo quando o dígito verificador do CPF não confere "
+                                 "(o CPF informado é o que a pessoa declarou)")
 
     def handle(self, *args, **options):
         if options["csv"]:
-            return self._por_csv(Path(options["csv"]), options["atualizar_nomes"])
+            return self._por_csv(Path(options["csv"]), options["atualizar_nomes"],
+                                 options["aceitar_cpf_invalido"])
         return self._pelo_catalogo()
 
     # ── carga a partir do catálogo (sem CPF ainda) ─────────────────────────
@@ -65,7 +69,7 @@ class Command(BaseCommand):
                 + ", ".join(sorted(NOMES_INCOMPLETOS))))
 
     # ── carga/atualização por CSV ──────────────────────────────────────────
-    def _por_csv(self, caminho: Path, atualizar_nomes: bool):
+    def _por_csv(self, caminho: Path, atualizar_nomes: bool, aceitar_invalido: bool = False):
         if not caminho.exists():
             raise SystemExit(f"CSV não encontrado: {caminho}")
 
@@ -85,9 +89,14 @@ class Command(BaseCommand):
                     ignoradas += 1
                     continue
                 if cpf and not valido(cpf):
-                    self.stderr.write(f"linha {i}: CPF inválido ({nome}) — ignorada")
-                    ignoradas += 1
-                    continue
+                    if not aceitar_invalido:
+                        self.stderr.write(f"linha {i}: CPF inválido ({nome}) — ignorada "
+                                          f"(use --aceitar-cpf-invalido para cadastrar assim mesmo)")
+                        ignoradas += 1
+                        continue
+                    self.stderr.write(self.style.WARNING(
+                        f"linha {i}: CPF inválido ({nome}) — cadastrado como declarado; "
+                        f"a pessoa NÃO conseguirá emitir até o CPF ser corrigido"))
                 if papel not in Participacao.Papel.values:
                     self.stderr.write(f"linha {i}: papel '{papel}' inválido — ignorada")
                     ignoradas += 1

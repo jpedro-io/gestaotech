@@ -164,6 +164,34 @@ antes: rode o `pip install -r requirements.txt` de novo dentro do `.venv`.
 
 ---
 
+## 3e. O PDF não gera (erro `[WinError 2]` ou "soffice não encontrado")
+
+Significa que o Python não achou o LibreOffice. Diagnosticar:
+
+```powershell
+.\\.venv\\Scripts\\python.exe manage.py check_certificado
+```
+
+Ele mostra o caminho encontrado. O código já procura sozinho em
+`C:\Program Files\LibreOffice\program\soffice.exe` e
+`C:\Program Files (x86)\LibreOffice\program\soffice.exe`.
+Se o `check_certificado` disser que não achou:
+
+1. Confirme onde o LibreOffice foi instalado:
+   ```powershell
+   Get-ChildItem "C:\Program Files", "C:\Program Files (x86)" -Filter "LibreOffice" -Directory -ErrorAction SilentlyContinue
+   ```
+2. Cole no `.env` o caminho do `soffice.exe` (com barra normal ou dupla):
+   ```ini
+   SOFFICE_BIN=C:/Program Files/LibreOffice/program/soffice.exe
+   ```
+3. **Pare o servidor (Ctrl+C) e suba de novo** — o `.env` só é lido ao iniciar.
+
+Se a pasta `LibreOffice` não existir em nenhum dos dois lugares, ele não foi instalado:
+baixe em https://pt-br.libreoffice.org/download/ (versão completa, não a “Portable”).
+
+---
+
 ## 4. Configurar o `.env`
 
 ```powershell
@@ -200,7 +228,7 @@ Com `DATABASE_URL` vazio (SQLite local, mais rápido para testar):
 ```powershell
 python manage.py migrate
 python manage.py seed_oficinas
-python manage.py criar_superuser
+python manage.py createsuperuser
 python manage.py seed_participantes --csv pessoas_exemplo.csv
 ```
 
@@ -249,7 +277,7 @@ segundo plano).
 | ver o que está no banco | `python manage.py exportar_participacoes` |
 | exportar para planilha | `python manage.py exportar_participacoes --saida participantes.csv` |
 | gerar códigos que faltam | `python manage.py gerar_codigos` |
-| criar outro acesso ao admin | `python manage.py criar_superuser` |
+| criar outro acesso ao admin | `python manage.py createsuperuser` |
 | conferir se há erro de configuração | `python manage.py check` |
 
 ---
@@ -271,24 +299,8 @@ segundo plano).
 
 ---
 
-## 9. Publicar (quando for a hora)
+## 9. Publicar
 
-O projeto já tem `Dockerfile` e `render.yaml`. No Render, além de subir o código,
-configure as variáveis do `.env` no painel (**Environment**), com atenção a:
-`DATABASE_URL` (Neon), `SECRET_KEY`, `DEBUG=0`, `ALLOWED_HOSTS=seudominio.com`,
-`CSRF_TRUSTED_ORIGINS=https://seudominio.com`, `SITE_URL=https://seudominio.com`
-e `DATA_LIBERACAO=2026-11-06`.
-
----
-
-## 10. Quem usa o site NÃO precisa de LibreOffice
-
-O LibreOffice roda **no servidor**, não no PC do participante. Quando alguém clica em
-“Baixar PDF”, o servidor preenche o DOCX, chama o `soffice` da própria máquina e devolve
-o PDF pronto — o navegador só recebe o arquivo. No PC do aluno basta um navegador.
-
-Para conferir se um servidor está com o LibreOffice certo:
-
-```powershell
-python manage.py check_certificado
-```
+O passo a passo do deploy está em **`DEPLOY_FLY.md`** (Fly.io + Neon).
+Em resumo: `flyctl launch --no-deploy` → `flyctl secrets set DATABASE_URL/CPF_PEPPER/SECRET_KEY`
+→ `flyctl deploy`. O próprio servidor roda `migrate` e a importação ao subir.

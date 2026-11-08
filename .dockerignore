@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 .venv/
 .git/
+capturas
+pessoas_exemplo.csv
+participacoes.csv
+COMO_RODAR.md

@@ -6,7 +6,7 @@
 .hero h1{ font-size:44px; font-weight:800; }
 .hero h1 em{ font-style:normal; color:var(--primaria); }
 .hero p{ margin-top:14px; font-size:16.5px; color:var(--secundario); max-width:520px; }
-.grid-emitir{ display:grid; grid-template-columns:1.05fr .95fr; gap:34px; margin-top:38px; align-items:start; }
+.grid-emitir{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:34px; margin-top:38px; align-items:start; }
 .form-empilhado{ display:flex; flex-direction:column; gap:20px; }
 .linha-titulo{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
 .linha-titulo h2{ font-size:19px; font-weight:600; }
@@ -63,7 +63,7 @@
 .rodape-resultado .sep{ width:2px; height:2px; border-radius:50%; background:var(--linha); }
 
 
-.grid-validar{ display:grid; grid-template-columns:1fr .82fr; gap:34px; align-items:start; margin-top:34px; }
+.grid-validar{ min-width:0; display:grid; grid-template-columns:1fr .82fr; gap:34px; align-items:start; margin-top:34px; }
 .hero-val h1{ font-size:40px; font-weight:800; }
 .hero-val p{ margin-top:12px; color:var(--secundario); font-size:16px; max-width:520px; }
 .codigo-grande{ height:60px; font-size:20px; letter-spacing:.14em; }

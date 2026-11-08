@@ -1,0 +1,72 @@
+/* ============================================================================
+   RESPONSIVO — um único bloco, no fim, para valer sobre todas as telas.
+   Ordem: tablet (900) → celular (620) → celular pequeno (460).
+   Regra de ouro: nada pode passar da largura da tela (evita o "zoom out" que
+   encolhe tudo e esconde o botão no iOS/Android).
+   ========================================================================== */
+
+/* contenção geral: nada estoura a viewport */
+html, body{ max-width:100%; overflow-x:hidden; }
+img, svg, video{ max-width:100%; height:auto; }
+.grid-emitir, .grid-validar, .cartoes, .cartao-resultado, .linha-titulo, .sucesso{ min-width:0; }
+.coluna, .lado, .dados, .cartao, .cartao-form{ min-width:0; }
+.input, .select, .btn{ max-width:100%; }
+h1, h2, h3, p{ overflow-wrap:break-word; }
+.codigo-grande, .mono{ overflow-wrap:anywhere; }
+
+@media (max-width: 900px){
+  .topo{ padding:14px 18px; gap:12px; }
+  .nav{ gap:16px; font-size:13px; }
+  .nav .so-oculta{ display:none; }
+  .marca img{ height:26px; }
+  .marca .txt b{ font-size:12.5px; }
+  .marca .txt span{ font-size:9.5px; }
+
+  .conteudo{ padding:28px 18px 32px; }
+  .hero{ max-width:100%; }
+  .hero h1{ font-size:31px; }
+  .hero-val h1{ font-size:29px; }
+  .hero p, .hero-val p{ font-size:15px; max-width:none; }
+
+  .grid-emitir, .grid-validar, .cartoes{ grid-template-columns:1fr; gap:20px; margin-top:26px; }
+  .cartao-form, .card-val{ padding:22px 18px; }
+  .cartao-resultado{ grid-template-columns:1fr; gap:16px; padding:16px; }
+  .miniatura{ max-width:100%; }
+  .sucesso{ flex-wrap:wrap; gap:12px; }
+  .sucesso h1{ font-size:22px; }
+  .sucesso .selo{ width:44px; height:44px; border-radius:13px; }
+  .resumo{ margin-left:0; }
+  .lista-dados{ grid-template-columns:1fr; gap:12px; }
+  .codigo-grande{ font-size:16px; height:52px; letter-spacing:.10em; }
+  .dica-qr{ flex-wrap:wrap; }
+  .dica-qr b{ font-size:10.5px; }
+  .rodape-resultado{ flex-direction:column; align-items:flex-start; gap:10px; }
+  .rodape-resultado .sep{ display:none; }
+
+  .rodape{ padding:20px 18px; flex-direction:column; align-items:flex-start; gap:14px; }
+  .apoio{ gap:16px; flex-wrap:wrap; }
+  .apoio img{ height:22px; }
+  .apoio .uesb{ height:26px; }
+  .creditos{ font-size:11px; }
+}
+
+@media (max-width: 620px){
+  .nav .rot-longo{ display:none; }
+  .nav .rot-curto{ display:inline; }
+}
+
+@media (max-width: 460px){
+  .topo{ padding:12px 14px; }
+  .marca .sep, .marca .txt span{ display:none; }
+  .marca img{ height:24px; }
+  .marca .txt b{ font-size:11.5px; }
+  .nav{ gap:12px; font-size:12.5px; }
+  .conteudo{ padding:22px 14px 28px; }
+  .hero h1{ font-size:27px; }
+  .hero-val h1{ font-size:25px; }
+  .btn{ height:48px; padding:0 18px; font-size:14.5px; }
+  .cartao-form, .card-val{ padding:20px 14px; }
+  .cartao-resultado{ padding:14px; }
+  .input{ height:48px; font-size:16px; }   /* 16px evita o zoom automático do iOS ao focar */
+  .dados .btn{ align-self:stretch; }        /* botão de largura cheia no cartão */
+}

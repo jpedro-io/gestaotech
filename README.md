@@ -35,7 +35,7 @@ Cole a string em `DATABASE_URL=`. As demais variáveis:
 ```bash
 python3 manage.py migrate            # cria as tabelas de oficinas e participações
 python3 manage.py seed_oficinas      # as 7 oficinas do projeto (idempotente)
-python3 manage.py criar_superuser    # acesso ao /admin/
+python3 manage.py createsuperuser    # acesso ao /admin/
 ```
 
 Depois, a cada equipe que enviar os dados, rode **uma vez por arquivo**:
@@ -105,6 +105,8 @@ fontes/              Montserrat, Inter, JetBrains Mono
 pessoas_exemplo.csv  amostra para testar a importação
 ```
 
+Atualizações de dados (novos alunos, correções, novas oficinas): veja **`ATUALIZAR_BANCO.md`**.
+
 ## Vínculo do aluno com a oficina
 
 A tabela `participacao` tem nome, CPF (hash + meio mascarado), forma de participação
@@ -121,16 +123,19 @@ container em produção — o `Dockerfile` já instala `libreoffice-writer`).
 python manage.py check_certificado   # confere LibreOffice, modelos e fontes
 ```
 
-## Docker
+## Docker e deploy
 
 ```bash
 docker build -t gestao-tech .
-docker run -p 8000:8000 --env-file .env gestao-tech
+docker run -p 8000:8000 --env-file .env -e PORT=8000 gestao-tech
 ```
-O `Dockerfile` instala `libreoffice-writer`, copia as fontes e roda com **1 worker e 4
-threads** — necessário para o rate limit (`django-ratelimit` com cache local). `render.yaml`
-já traz o serviço configurado; use um plano com mais de 512 MB, porque o LibreOffice não
-cabe no free.
+
+O container usa `entrypoint.sh`: aplica `migrate`, opcionalmente semeia o banco
+(`SEMEAR=1`) e sobe o gunicorn. O deploy no Fly.io está descrito em **`DEPLOY_FLY.md`**
+(`fly.toml` já configurado).
+O `Dockerfile` instala `libreoffice-writer`, copia as fontes e sobe com **1 worker e 4
+threads** — necessário para o rate limit (`django-ratelimit` com cache local). Use uma máquina
+com **1 GB de RAM**: o LibreOffice precisa de memória para converter o DOCX.
 
 ## Testes rápidos
 

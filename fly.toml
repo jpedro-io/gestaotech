@@ -1,0 +1,43 @@
+# fly.toml — Gestão Tech (Django + Neon + LibreOffice)
+app = "gestao-tech"
+primary_region = "gru"
+console_command = "python manage.py shell"
+
+[build]
+  dockerfile = "Dockerfile"
+
+# aplica as migrations a cada deploy (roda numa máquina temporária, antes do tráfego)
+[deploy]
+  release_command = "python manage.py migrate --noinput"
+
+[env]
+  DEBUG = "0"
+  PORT = "8000"
+  ALLOWED_HOSTS = "gestao-tech.fly.dev"
+  CSRF_TRUSTED_ORIGINS = "https://gestao-tech.fly.dev"
+  SITE_URL = "https://gestao-tech.fly.dev"
+  DATA_LIBERACAO = "2026-11-06"
+  SEMEAR = "1"
+  GUNICORN_WORKERS = "1"
+  GUNICORN_THREADS = "4"
+  GUNICORN_TIMEOUT = "180"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 20
+    hard_limit = 40
+
+[[vm]]
+  memory = "1gb"
+  cpus = 1
+
+# segredos NÃO ficam aqui — defina com:
+#   flyctl secrets set DATABASE_URL="..." CPF_PEPPER="..." SECRET_KEY="..."

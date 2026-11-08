@@ -72,17 +72,42 @@ def _qr_png(url):
     return buf.getvalue()
 
 
+def _caminhos_windows():
+    """Locais onde o instalador do LibreOffice coloca o soffice.exe."""
+    if os.name != "nt":
+        return []
+    bases = [os.environ.get("ProgramFiles", r"C:\Program Files"),
+             os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)"),
+             os.environ.get("LOCALAPPDATA", "")]
+    return [os.path.join(b, "LibreOffice", "program", "soffice.exe")
+            for b in bases if b]
+
+
 def _soffice():
-    """Caminho do LibreOffice: SOFFICE_BIN no .env ou o do PATH."""
-    return os.environ.get("SOFFICE_BIN") or shutil.which("soffice") or shutil.which("libreoffice")
+    """Caminho do LibreOffice: SOFFICE_BIN no .env, o do PATH ou o padrão do Windows."""
+    configurado = (os.environ.get("SOFFICE_BIN") or "").strip().strip('"')
+    if configurado and os.path.exists(configurado):
+        return configurado
+    achado = shutil.which("soffice") or shutil.which("libreoffice")
+    if achado:
+        return achado
+    for candidato in _caminhos_windows():
+        if os.path.exists(candidato):
+            return candidato
+    return None
 
 
 def _docx_para_pdf(docx_bytes):
     with tempfile.TemporaryDirectory() as tmp, _slot:
         entrada = Path(tmp) / "cert.docx"
         entrada.write_bytes(docx_bytes)
+        exe = _soffice()
+        if not exe:
+            raise RuntimeError(
+                "LibreOffice não encontrado. Instale o LibreOffice ou defina "
+                "SOFFICE_BIN no .env (ex.: C:/Program Files/LibreOffice/program/soffice.exe).")
         subprocess.run(
-            [_soffice() or "soffice", f"-env:UserInstallation=file://{tmp}/perfil",
+            [exe, f"-env:UserInstallation=file://{tmp}/perfil",
              "--headless", "--convert-to", "pdf", "--outdir", tmp, str(entrada)],
             check=True, timeout=settings.LIBREOFFICE_TIMEOUT, capture_output=True,
         )

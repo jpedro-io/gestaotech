@@ -13,7 +13,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN python manage.py collectstatic --noinput
+RUN chmod +x entrypoint.sh
 
 ENV PYTHONUNBUFFERED=1
 EXPOSE 8000
-CMD gunicorn config.wsgi --workers 1 --threads 4 --timeout 120 --bind 0.0.0.0:${PORT:-8000}
+CMD ["./entrypoint.sh"]

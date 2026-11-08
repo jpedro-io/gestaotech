@@ -1,5 +1,32 @@
-__pycache__/
-*.pyc
-db.sqlite3
-staticfiles/
+# ── segredos: NUNCA subir ───────────────────────────────────────────────────
 .env
+.env.*
+!.env.example
+
+# ── banco local e arquivos gerados ─────────────────────────────────────────
+db.sqlite3
+*.sqlite3
+participacoes.csv
+staticfiles/
+media/
+
+# ── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── editores / sistema ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ── capturas de teste ──────────────────────────────────────────────────────
+capturas/
+
+# ── Fly ────────────────────────────────────────────────────────────────────
+# o fly.toml VAI para o repositório (é a configuração do app)
